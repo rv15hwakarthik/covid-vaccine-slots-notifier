@@ -1,0 +1,46 @@
+
+.header {
+    
+    h1 {
+        border-bottom: 2px solid pink;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .tabs-container {
+        padding: 10px 64px 5px 64px;
+        display: flex;
+        border-bottom: 1px solid lightgray;
+
+        > div {
+            margin: 0 10px;
+            padding-bottom: 3px;
+
+            > a {
+                text-decoration: none;
+                color: black;
+            }
+        }
+
+        .selected {
+            border-bottom: 3px solid pink;
+            padding-bottom: 6px;
+        }
+
+        .tag {
+            padding: 3px;
+            font-size: 10px;
+            border: 1px solid pink;
+            background: pink;
+            border-radius: 15px;
+            margin-left: 8px;
+        }
+    }
+
+    @media only screen and (max-width: 600px) {
+        .tabs-container {
+            justify-content: center;
+        }
+    }
+
+}

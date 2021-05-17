@@ -1,0 +1,63 @@
+
+.notifier {
+
+    a {
+        text-decoration: none;
+        color: #03A9F4;
+    }
+
+    .instructions {
+        margin-top: 20px;
+        border: 1px solid pink;
+        padding: 20px 0;
+        background: pink;
+    }
+
+    .row {
+        display: flex;
+        padding: 20px 0 0 0;
+
+        .label {
+            text-align: right;
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        > div {
+            text-align: left;
+            flex: 1;
+
+            select {
+                width: 200px;
+            }
+
+            label {
+                padding-left: 3px;
+            }
+        }
+
+        * {
+            padding: 10px;
+        }
+
+        .refresh {
+            vertical-align: bottom;
+            width: 20px;
+            cursor: pointer;
+        }
+    }
+
+    .confirmation {
+        padding-top: 30px;
+        font-size: 30px;
+    }
+
+
+    @media only screen and (max-width: 600px) {
+        select {
+            width: 110px !important;
+        }
+    }
+}
