@@ -16,7 +16,7 @@ MyDateString = ('0' + MyDate.getDate()).slice(-2) + '-'
     + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-'
     + MyDate.getFullYear();
 
-const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/">Cowin<img src={LinkIcon} alt="redirect icon" width="20px" target="_blank"></img></a><div>Available at :</div></span>
+const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/" target="_blank" rel="noreferrer" >Cowin<img src={LinkIcon} alt="redirect icon" width="20px" style={{ verticalAlign: 'middle'}} ></img></a><div>Available at :</div></span>
 const NOT_AVAILABLE_MESSAGE = <span>Vaccines are <span style={ { color: 'red'}}>NOT AVAILABLE</span></span>
 const SOMETHING_WENT_WRONG = <span style={{ color: 'red'}}>Something went wrong</span>
 
@@ -45,10 +45,11 @@ const Notifier = function(props) {
         setFetchInterval(setInterval(function() {
             fetchAvailableSlots(true);
         }, 40000));
-    }, [districtId, ageGroup])
+    }, [districtId, ageGroup, fetchAvailableSlots])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
+        setAvailableCenters([]);
         Axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${MyDateString}`).
         then(response => {
             if(response.data && response.status === 200) {
@@ -72,7 +73,6 @@ const Notifier = function(props) {
                     }
                 } else {
                     setMessage(NOT_AVAILABLE_MESSAGE);
-                    setAvailableCenters('')
                 }
             } else {
                 setMessage(SOMETHING_WENT_WRONG);
@@ -97,13 +97,6 @@ const Notifier = function(props) {
         clearInterval(fetchInterval);
     }
 
-    function renderCenters(centers){
-        let tempArray = []
-        for (let index = 0; index < centers.length; index++) {
-                tempArray.push(<div>{centers[index]}</div>)
-        }
-        return tempArray
-    }
     function triggerBrowserNotification() {
         if (!("Notification" in window)) {
             alert("This browser does not support desktop notification");
@@ -142,8 +135,8 @@ const Notifier = function(props) {
         <div className="row">
             <div className="label">Age Group:</div>
             <div>
-                <input type="radio" name="age" value="18" onChange={onAgeChange} checked={ageGroup === `18` ? true : false} /><label>18 to 44</label>
-                <input type="radio" name="age" value="45" onChange={onAgeChange} checked={ageGroup === `45` ? true : false} /><label>45+</label>
+                <label><input type="radio" name="age" value="18" onChange={onAgeChange} checked={ageGroup === `18` ? true : false} /> 18 to 44</label>
+                <label><input type="radio" name="age" value="45" onChange={onAgeChange} checked={ageGroup === `45` ? true : false} /> 45+</label>
             </div>
         </div>
         <div className="row">

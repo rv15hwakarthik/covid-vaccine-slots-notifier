@@ -1,0 +1,17 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    border-top: 1px solid pink;
+    padding: 5px;
+
+    > img {
+        margin-right: 3px;
+        vertical-align: sub;
+    }
+
+    a {
+        color: black;
+    }
+}
