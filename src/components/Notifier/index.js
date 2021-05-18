@@ -38,6 +38,8 @@ const Notifier = function(props) {
             fetchAvailableSlots(true);
         }, 45000));
 
+        Notification.requestPermission();
+
         return () => {
             clearInterval(fetchInterval);
         }
@@ -114,7 +116,7 @@ const Notifier = function(props) {
             Notification.requestPermission().then(function (permission) {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                    var notification = new Notification("Hi there!");
+                    var notification = new Notification("Hi there! Vaccine slots are available:");
                 }
             });
         }
