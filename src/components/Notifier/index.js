@@ -109,6 +109,10 @@ const Notifier = function(props) {
         else if (Notification.permission === "granted") {
             // If it's okay let's create a notification
             var notification = new Notification("Hi there! Vaccine slots are available:");
+            notification.onclick = function(event) {
+                event.preventDefault(); 
+                window.open('https://selfregistration.cowin.gov.in/', '_blank');
+            }
         }
 
         // Otherwise, we need to ask the user for permission
@@ -117,6 +121,10 @@ const Notifier = function(props) {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
                     var notification = new Notification("Hi there! Vaccine slots are available:");
+                    notification.onclick = function(event) {
+                        event.preventDefault(); 
+                        window.open('https://selfregistration.cowin.gov.in/', '_blank');
+                    }
                 }
             });
         }
