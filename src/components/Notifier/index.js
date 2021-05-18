@@ -45,7 +45,7 @@ const Notifier = function(props) {
         setFetchInterval(setInterval(function() {
             fetchAvailableSlots(true);
         }, 40000));
-    }, [districtId, ageGroup, fetchAvailableSlots])
+    }, [districtId, ageGroup])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
