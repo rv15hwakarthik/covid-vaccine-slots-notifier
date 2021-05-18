@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import './style.scss'
 import Axios from 'axios';
+import React, { useEffect, useState } from 'react'
 
-import RefreshIcon from '../../assets/refresh.svg';
 import LinkIcon from '../../assets/redirect.svg';
+import RefreshIcon from '../../assets/refresh.svg';
+
+import './style.scss'
 
 const json = require('../../constants/districts.json');
 
@@ -16,6 +17,7 @@ MyDateString = ('0' + MyDate.getDate()).slice(-2) + '-'
 const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/">Cowin<img src={LinkIcon} alt="redirect icon" width="20px" target="_blank"></img></a></span>
 const NOT_AVAILABLE_MESSAGE = <span>Vaccines are <span style={ { color: 'red'}}>NOT AVAILABLE</span></span>
 const SOMETHING_WENT_WRONG = <span style={{ color: 'red'}}>Something went wrong</span>
+const CENTER = <span style={{ color: 'red'}}>Available at :</span>
 
 const Notifier = function(props) {
 
@@ -23,7 +25,9 @@ const Notifier = function(props) {
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(`18`);
     const [message, setMessage] = useState('');
+    const [centers, setCenters] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
+    const [availableCenters, setAvailableCenters] = useState({});
 
     useEffect(() => {
         const arr = [];
@@ -56,9 +60,11 @@ const Notifier = function(props) {
             if(response.data && response.status === 200) {
                 const centers = response.data.centers;
                 let isAvailable = false; 
+                let availableCenters = []
                 centers && centers.map((center) => {
                     center.sessions && center.sessions.map(session => {
-                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup)) {
+                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup) && session.available_capacity_dose1) {
+                            availableCenters.push(center)
                             isAvailable = true;
                             if(fromInterval) {
                                 triggerBrowserNotification();
@@ -69,8 +75,11 @@ const Notifier = function(props) {
                 });
                 if(isAvailable) {
                     setMessage(AVAILABLE_MESSAGE);
+                    setCenters(CENTER)
+                    setAvailableCenters(availableCenters)
                 } else {
                     setMessage(NOT_AVAILABLE_MESSAGE);
+                    setAvailableCenters('')
                 }
             } else {
                 setMessage(SOMETHING_WENT_WRONG);
@@ -101,6 +110,13 @@ const Notifier = function(props) {
         }, 45000));
     }
 
+    function renderCenters(centers){
+        let tempArray = []
+        for (let index = 0; index < centers.length; index++) {
+                tempArray.push(<div>{centers[index].block_name}</div>)
+        }
+        return tempArray
+    }
     function triggerBrowserNotification() {
         if (!("Notification" in window)) {
             alert("This browser does not support desktop notification");
@@ -156,6 +172,12 @@ const Notifier = function(props) {
         </div>
         <div className="confirmation">
             {message}
+        </div>
+        <div className="centers">
+            <div className="label">{centers}</div>
+            <div>
+               {renderCenters(availableCenters)}
+            </div>
         </div>
     </div> : ''
 }
