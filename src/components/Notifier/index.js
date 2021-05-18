@@ -38,7 +38,9 @@ const Notifier = function(props) {
             fetchAvailableSlots(true);
         }, 45000));
 
-        Notification.requestPermission();
+        if ("Notification" in window) {
+            Notification.requestPermission();
+        }
 
         return () => {
             clearInterval(fetchInterval);
