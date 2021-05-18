@@ -14,10 +14,9 @@ MyDateString = ('0' + MyDate.getDate()).slice(-2) + '-'
     + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-'
     + MyDate.getFullYear();
 
-const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/">Cowin<img src={LinkIcon} alt="redirect icon" width="20px" target="_blank"></img></a></span>
+const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/">Cowin<img src={LinkIcon} alt="redirect icon" width="20px" target="_blank"></img></a><div>Available at :</div></span>
 const NOT_AVAILABLE_MESSAGE = <span>Vaccines are <span style={ { color: 'red'}}>NOT AVAILABLE</span></span>
 const SOMETHING_WENT_WRONG = <span style={{ color: 'red'}}>Something went wrong</span>
-const CENTER = <span style={{ color: 'red'}}>Available at :</span>
 
 const Notifier = function(props) {
 
@@ -25,9 +24,8 @@ const Notifier = function(props) {
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(`18`);
     const [message, setMessage] = useState('');
-    const [centers, setCenters] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
-    const [availableCenters, setAvailableCenters] = useState({});
+    const [availableCenters, setAvailableCenters] = useState([]);
 
     useEffect(() => {
         const arr = [];
@@ -60,11 +58,11 @@ const Notifier = function(props) {
             if(response.data && response.status === 200) {
                 const centers = response.data.centers;
                 let isAvailable = false; 
-                let availableCenters = []
+                let centersArray = []
                 centers && centers.map((center) => {
                     center.sessions && center.sessions.map(session => {
-                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup) && session.available_capacity_dose1) {
-                            availableCenters.push(center)
+                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup)) {
+                            centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
                             if(fromInterval) {
                                 triggerBrowserNotification();
@@ -75,8 +73,7 @@ const Notifier = function(props) {
                 });
                 if(isAvailable) {
                     setMessage(AVAILABLE_MESSAGE);
-                    setCenters(CENTER)
-                    setAvailableCenters(availableCenters)
+                    setAvailableCenters([...new Set(centersArray)])
                 } else {
                     setMessage(NOT_AVAILABLE_MESSAGE);
                     setAvailableCenters('')
@@ -113,7 +110,7 @@ const Notifier = function(props) {
     function renderCenters(centers){
         let tempArray = []
         for (let index = 0; index < centers.length; index++) {
-                tempArray.push(<div>{centers[index].block_name}</div>)
+                tempArray.push(<div>{centers[index]}</div>)
         }
         return tempArray
     }
@@ -174,9 +171,11 @@ const Notifier = function(props) {
             {message}
         </div>
         <div className="centers">
-            <div className="label">{centers}</div>
             <div>
-               {renderCenters(availableCenters)}
+            { 
+            (availableCenters || []).map((center) => {
+                 return <div>{center}</div>
+            })}
             </div>
         </div>
     </div> : ''
