@@ -21,7 +21,7 @@ const Notifier = function(props) {
 
     const [districts, setDistricts] = useState([]);
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
-    const [ageGroup, setAgeGroup] = useState(`18`);
+    const [ageGroup, setAgeGroup] = useState((localStorage.getItem('ageGroup')) || `18`);
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
 
