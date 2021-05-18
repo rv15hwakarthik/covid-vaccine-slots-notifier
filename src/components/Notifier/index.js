@@ -1,12 +1,14 @@
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { Select } from 'antd';
 
 import LinkIcon from '../../assets/redirect.svg';
 import RefreshIcon from '../../assets/refresh.svg';
 
 import './style.scss'
+import 'antd/dist/antd.css';
 
-const json = require('../../constants/districts.json');
+const districtsJSON = require('../../constants/districts.json');
 
 var MyDateString;
 var MyDate = new Date();
@@ -18,9 +20,10 @@ const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVA
 const NOT_AVAILABLE_MESSAGE = <span>Vaccines are <span style={ { color: 'red'}}>NOT AVAILABLE</span></span>
 const SOMETHING_WENT_WRONG = <span style={{ color: 'red'}}>Something went wrong</span>
 
+const { Option, OptGroup } = Select;
+
 const Notifier = function(props) {
 
-    const [districts, setDistricts] = useState([]);
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState((localStorage.getItem('ageGroup')) || `18`);
     const [message, setMessage] = useState('');
@@ -28,15 +31,6 @@ const Notifier = function(props) {
     const [availableCenters, setAvailableCenters] = useState([]);
 
     useEffect(() => {
-        const arr = [];
-        json.map((state) => {
-            arr.push({ text: `-----${state.text}-----`, disabled: true, })
-            state.children.map((district) => {
-                arr.push({ text: district.text, id: district.id })
-            })
-        })
-        setDistricts(arr);
-
         if ("Notification" in window) {
             Notification.requestPermission();
         }
@@ -89,9 +83,9 @@ const Notifier = function(props) {
         })
     }
 
-    function onDistrictChange(e) {
-        localStorage.setItem('districtId', e.target.value );
-        setDistrictId(e.target.value)
+    function onDistrictChange(value) {
+        localStorage.setItem('districtId', value );
+        setDistrictId(value)
 
         clearInterval(fetchInterval);
     }
@@ -139,7 +133,7 @@ const Notifier = function(props) {
         }
     }
 
-    return districts.length > 0 ? <div className="notifier">
+    return districtsJSON.length > 0 ? <div className="notifier">
         <div className="instructions">
                 <div>- Make sure the browser notifications are enabled for this website</div>
                 <div>- Keep the tab open to get a browser notification whenever a slot is available</div>
@@ -155,11 +149,21 @@ const Notifier = function(props) {
         <div className="row">
             <div className="label">District:</div>
             <div>
-                <select name="district" defaultValue={districtId} onChange={onDistrictChange}>
-                    {districts.map((district) => {
-                        return <option key={district.id} value={district.id} disabled={district.disabled} >{district.text}</option>
+                <Select
+                    showSearch
+                    placeholder="Select district"
+                    optionFilterProp="children"
+                    onChange={onDistrictChange}
+                    value={districtId}
+                >
+                    {districtsJSON.map((district) => {
+                        return <OptGroup label={district.text}>
+                            {district.children && district.children.map((child) => {
+                                return <Option key={child.id} value={child.id} >{child.text}</Option>
+                            })}
+                        </OptGroup>
                     })}
-                </select>
+                </Select>
                 <img className="refresh" src={RefreshIcon} alt="refresh" onClick={fetchAvailableSlots}></img>
             </div>
         </div>
