@@ -36,9 +36,6 @@ const Notifier = function(props) {
             })
         })
         setDistricts(arr);
-        setFetchInterval(setInterval(function() {
-            fetchAvailableSlots(true);
-        }, 45000));
 
         if ("Notification" in window) {
             Notification.requestPermission();
@@ -51,6 +48,9 @@ const Notifier = function(props) {
 
     useEffect(() => {
         fetchAvailableSlots();
+        setFetchInterval(setInterval(function() {
+            fetchAvailableSlots(true);
+        }, 40000));
     }, [districtId, ageGroup])
 
     function fetchAvailableSlots(fromInterval) {
@@ -66,9 +66,6 @@ const Notifier = function(props) {
                         if(session.available_capacity && session.min_age_limit === parseInt(ageGroup)) {
                             centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
-                            if(fromInterval) {
-                                triggerBrowserNotification();
-                            }
                             return;
                         }
                     })
@@ -76,6 +73,9 @@ const Notifier = function(props) {
                 if(isAvailable) {
                     setMessage(AVAILABLE_MESSAGE);
                     setAvailableCenters([...new Set(centersArray)])
+                    if(fromInterval) {
+                        triggerBrowserNotification();
+                    }
                 } else {
                     setMessage(NOT_AVAILABLE_MESSAGE);
                     setAvailableCenters('')
@@ -94,9 +94,6 @@ const Notifier = function(props) {
         setDistrictId(e.target.value)
 
         clearInterval(fetchInterval);
-        setFetchInterval(setInterval(function() {
-            fetchAvailableSlots(true);
-        }, 45000));
     }
 
     function onAgeChange(e) {
@@ -104,9 +101,6 @@ const Notifier = function(props) {
         setAgeGroup(e.target.value)
 
         clearInterval(fetchInterval);
-        setFetchInterval(setInterval(function() {
-            fetchAvailableSlots(true);
-        }, 45000));
     }
 
     function renderCenters(centers){
