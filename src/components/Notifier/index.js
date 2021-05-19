@@ -110,28 +110,32 @@ const Notifier = function(props) {
     }
 
     function triggerBrowserNotification() {
-        if (!("Notification" in window)) {
-            console.log("This browser does not support desktop notification");
-        }
-
-        else if (Notification.permission === "granted") {
-            var notification = new Notification("Hi there! Vaccine slots are available:");
-            notification.onclick = function(event) {
-                event.preventDefault(); 
-                window.open('https://selfregistration.cowin.gov.in/', '_blank');
+        try {
+            if (!("Notification" in window)) {
+                console.log("This browser does not support desktop notification");
             }
-        }
-
-        else if (Notification.permission !== "denied") {
-            Notification.requestPermission().then(function (permission) {
-                if (permission === "granted") {
-                    var notification = new Notification("Hi there! Vaccine slots are available:");
-                    notification.onclick = function(event) {
-                        event.preventDefault(); 
-                        window.open('https://selfregistration.cowin.gov.in/', '_blank');
-                    }
+    
+            else if (Notification.permission === "granted") { 
+                var notification = new Notification("Hi there! Vaccine slots are available:");
+                notification.onclick = function(event) {
+                    event.preventDefault(); 
+                    window.open('https://selfregistration.cowin.gov.in/', '_blank');
                 }
-            });
+            }
+    
+            else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(function (permission) {
+                    if (permission === "granted") {
+                        var notification = new Notification("Hi there! Vaccine slots are available:");
+                        notification.onclick = function(event) {
+                            event.preventDefault(); 
+                            window.open('https://selfregistration.cowin.gov.in/', '_blank');
+                        }
+                    }
+                });
+            }
+        } catch(err) {
+            console.log("Failed to send a notification due to error:", err);
         }
     }
 
