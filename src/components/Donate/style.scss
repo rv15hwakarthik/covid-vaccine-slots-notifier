@@ -16,4 +16,11 @@
         margin: auto;
         align-items: center;
     }
+
+    @media only screen and (max-width: 600px) {
+
+        .heading {
+            margin-top: 0;
+        }
+    }
 }
