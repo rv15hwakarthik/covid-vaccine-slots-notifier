@@ -27,7 +27,7 @@ const Notifier = function(props) {
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(localStorage.getItem('ageGroup') || `18`);
     const [dose, setDose] = useState( localStorage.getItem('dose') || `dose_1`);
-    const [vaccineCompany, setVaccineCompany] = useState( localStorage.getItem('vaccineCompany') || `ANY`);
+    const [vaccineType, setVaccineType] = useState( localStorage.getItem('vaccineType') || `ANY`);
 
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
@@ -48,7 +48,7 @@ const Notifier = function(props) {
         setFetchInterval(setInterval(function() {
             fetchAvailableSlots(true);
         }, 40000));
-    }, [districtId, ageGroup, dose, vaccineCompany])
+    }, [districtId, ageGroup, dose, vaccineType])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
@@ -66,7 +66,7 @@ const Notifier = function(props) {
                             doses = session.available_capacity_dose2 
                         }
 
-                        if(doses && session.min_age_limit === parseInt(ageGroup) && (session.vaccine === vaccineCompany || vaccineCompany === 'ANY')){
+                        if(doses && session.min_age_limit === parseInt(ageGroup) && (session.vaccine === vaccineType || vaccineType === 'ANY')){
                             centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
                         }
@@ -111,8 +111,8 @@ const Notifier = function(props) {
     }
 
     function onCompanyChange(e) {
-        localStorage.setItem('vaccineCompany', e.target.value );
-        setVaccineCompany(e.target.value)
+        localStorage.setItem('vaccineType', e.target.value );
+        setVaccineType(e.target.value)
         clearInterval(fetchInterval);
     }
 
@@ -167,11 +167,11 @@ const Notifier = function(props) {
         <div className="row">
             <div className="label">Vaccine type</div>
             <div>
-                <label><input type="radio" name="vaccineCompany" value="COVISHIELD" onChange={onCompanyChange} checked={vaccineCompany === `COVISHIELD` ? true : false} /> COVISHIELD</label>
+                <label><input type="radio" name="vaccineType" value="ANY" onChange={onCompanyChange} checked={vaccineType === `ANY` ? true : false} /> ANY</label>
                 <br />
-                <label><input type="radio" name="vaccineCompany" value="COVAXIN" onChange={onCompanyChange} checked={vaccineCompany === `COVAXIN` ? true : false} /> COVAXIN</label>
+                <label><input type="radio" name="vaccineType" value="COVISHIELD" onChange={onCompanyChange} checked={vaccineType === `COVISHIELD` ? true : false} /> COVISHIELD</label>
                 <br />
-                <label><input type="radio" name="vaccineCompany" value="ANY" onChange={onCompanyChange} checked={vaccineCompany === `ANY` ? true : false} /> ANY</label>
+                <label><input type="radio" name="vaccineType" value="COVAXIN" onChange={onCompanyChange} checked={vaccineType === `COVAXIN` ? true : false} /> COVAXIN</label>
             </div>
         </div>
         <div className="row">
