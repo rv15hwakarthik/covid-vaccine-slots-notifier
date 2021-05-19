@@ -154,7 +154,6 @@ const Notifier = function(props) {
             <div className="label">Age Group:</div>
             <div>
                 <label><input type="radio" name="age" value="18" onChange={onAgeChange} checked={ageGroup === `18` ? true : false} /> 18 to 44</label>
-                <br />
                 <label><input type="radio" name="age" value="45" onChange={onAgeChange} checked={ageGroup === `45` ? true : false} /> 45+</label>
             </div>
         </div>
@@ -162,7 +161,6 @@ const Notifier = function(props) {
             <div className="label">Dose Number:</div>
             <div>
                 <label><input type="radio" name="dose" value="dose_1" onChange={onDoseChange} checked={dose === `dose_1` ? true : false} /> Dose 1</label>
-                <br />
                 <label><input type="radio" name="dose" value="dose_2" onChange={onDoseChange} checked={dose === `dose_2` ? true : false} /> Dose 2</label>
             </div>
         </div>
@@ -170,9 +168,7 @@ const Notifier = function(props) {
             <div className="label">Vaccine Type:</div>
             <div>
                 <label><input type="radio" name="vaccineType" value="ANY" onChange={onVaccineTypeChange} checked={vaccineType === `ANY` ? true : false} /> ANY</label>
-                <br />
                 <label><input type="radio" name="vaccineType" value="COVISHIELD" onChange={onVaccineTypeChange} checked={vaccineType === `COVISHIELD` ? true : false} /> COVISHIELD</label>
-                <br />
                 <label><input type="radio" name="vaccineType" value="COVAXIN" onChange={onVaccineTypeChange} checked={vaccineType === `COVAXIN` ? true : false} /> COVAXIN</label>
             </div>
         </div>

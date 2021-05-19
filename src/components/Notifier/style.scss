@@ -9,7 +9,7 @@
 
     .row {
         display: flex;
-        padding: 20px 0 0 0;
+        padding: 5px 0 0 0;
 
         .label {
             text-align: right;
@@ -29,6 +29,7 @@
 
             label {
                 padding-left: 3px;
+                padding-right: 10px;
             }
         }
 
@@ -44,7 +45,7 @@
     .refresh {
         cursor: pointer;
         text-decoration: underline;
-        padding-top: 20px;
+        padding-top: 5px;
 
         img {
             width: 20px;
@@ -54,19 +55,25 @@
     }
 
     .confirmation {
-        padding-top: 30px;
-        font-size: 30px;
+        padding-top: 15px;
+        font-size: 23px;
     }
 
 
     @media only screen and (max-width: 600px) {
 
-        .row {
-            padding: 10px 0 0 0;
-        }
-
         .ant-select {
             width: 130px !important;
+        }
+
+        .row {
+
+            > div {
+
+                label {
+                    display: block;
+                }
+            }
         }
     }
 }
