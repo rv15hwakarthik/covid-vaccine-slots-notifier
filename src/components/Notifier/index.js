@@ -27,7 +27,7 @@ const Notifier = function(props) {
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(localStorage.getItem('ageGroup') || `18`);
     const [dose, setDose] = useState( localStorage.getItem('dose') || `dose_1`);
-    const [vaccineCompany, setVaccineCompany] = useState( localStorage.getItem('vaccineCompany') || `COVISHIELD`);
+    const [vaccineCompany, setVaccineCompany] = useState( localStorage.getItem('vaccineCompany') || `ANY`);
 
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
