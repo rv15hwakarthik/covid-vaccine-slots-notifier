@@ -165,7 +165,7 @@ const Notifier = function(props) {
             </div>
         </div>
         <div className="row">
-            <div className="label">Vaccine type</div>
+            <div className="label">Vaccine Type:</div>
             <div>
                 <label><input type="radio" name="vaccineType" value="ANY" onChange={onCompanyChange} checked={vaccineType === `ANY` ? true : false} /> ANY</label>
                 <br />
