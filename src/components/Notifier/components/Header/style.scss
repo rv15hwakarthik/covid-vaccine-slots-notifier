@@ -1,0 +1,14 @@
+
+.heading {
+    border: 1px solid pink;
+    padding: 20px 0;
+    background: pink;
+    position: relative;
+
+    .close {
+        cursor: pointer;
+        position: absolute;
+        top: 0px;
+        right: 5px;
+    }
+}

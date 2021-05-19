@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react'
 import LinkIcon from '../../assets/redirect.svg';
 import RefreshIcon from '../../assets/refresh.svg';
 
+import Header from './components/Header';
+
 import './style.scss'
 import 'antd/dist/antd.css';
 
@@ -147,11 +149,7 @@ const Notifier = function(props) {
     }
 
     return districtsJSON.length > 0 ? <div className="notifier">
-        <div className="heading">
-                <div>- Make sure the browser notifications are enabled for this website</div>
-                <div>- Keep the tab open to get a browser notification whenever a slot is available</div>
-                <div>- Your selected district is saved for quicker results</div>
-        </div>
+        <Header />
         <div className="row">
             <div className="label">Age Group:</div>
             <div>
