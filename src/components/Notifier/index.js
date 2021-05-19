@@ -1,6 +1,6 @@
+import { Select } from 'antd';
 import Axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Select } from 'antd';
 
 import LinkIcon from '../../assets/redirect.svg';
 import RefreshIcon from '../../assets/refresh.svg';
@@ -27,6 +27,8 @@ const Notifier = function(props) {
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(localStorage.getItem('ageGroup') || `18`);
     const [dose, setDose] = useState( localStorage.getItem('dose') || `dose_1`);
+    const [vaccineCompany, setVaccineCompany] = useState( localStorage.getItem('vaccineCompany') || `COVISHIELD`);
+
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
     const [availableCenters, setAvailableCenters] = useState([]);
@@ -46,7 +48,7 @@ const Notifier = function(props) {
         setFetchInterval(setInterval(function() {
             fetchAvailableSlots(true);
         }, 40000));
-    }, [districtId, ageGroup, dose])
+    }, [districtId, ageGroup, dose, vaccineCompany])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
@@ -64,7 +66,7 @@ const Notifier = function(props) {
                             doses = session.available_capacity_dose2 
                         }
 
-                        if(doses && session.min_age_limit === parseInt(ageGroup)) {
+                        if(doses && session.min_age_limit === parseInt(ageGroup) && (session.vaccine === vaccineCompany || vaccineCompany === 'ANY')){
                             centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
                         }
@@ -91,7 +93,6 @@ const Notifier = function(props) {
     function onDistrictChange(value) {
         localStorage.setItem('districtId', value );
         setDistrictId(value)
-
         clearInterval(fetchInterval);
     }
 
@@ -106,6 +107,12 @@ const Notifier = function(props) {
         localStorage.setItem('dose', e.target.value );
         setDose(e.target.value)
 
+        clearInterval(fetchInterval);
+    }
+
+    function onCompanyChange(e) {
+        localStorage.setItem('vaccineCompany', e.target.value );
+        setVaccineCompany(e.target.value)
         clearInterval(fetchInterval);
     }
 
@@ -155,6 +162,16 @@ const Notifier = function(props) {
                 <label><input type="radio" name="dose" value="dose_1" onChange={onDoseChange} checked={dose === `dose_1` ? true : false} /> Dose 1</label>
                 <br />
                 <label><input type="radio" name="dose" value="dose_2" onChange={onDoseChange} checked={dose === `dose_2` ? true : false} /> Dose 2</label>
+            </div>
+        </div>
+        <div className="row">
+            <div className="label">Vaccine type</div>
+            <div>
+                <label><input type="radio" name="vaccineCompany" value="COVISHIELD" onChange={onCompanyChange} checked={vaccineCompany === `COVISHIELD` ? true : false} /> COVISHIELD</label>
+                <br />
+                <label><input type="radio" name="vaccineCompany" value="COVAXIN" onChange={onCompanyChange} checked={vaccineCompany === `COVAXIN` ? true : false} /> COVAXIN</label>
+                <br />
+                <label><input type="radio" name="vaccineCompany" value="ANY" onChange={onCompanyChange} checked={vaccineCompany === `ANY` ? true : false} /> ANY</label>
             </div>
         </div>
         <div className="row">
