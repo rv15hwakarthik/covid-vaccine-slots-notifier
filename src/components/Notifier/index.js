@@ -112,7 +112,7 @@ const Notifier = function(props) {
 
     function onCompanyChange(e) {
         localStorage.setItem('vaccineCompany', e.target.value );
-        setVaccineCompany(e.target.value)
+        setVaccineCompany(e.target.value);
         clearInterval(fetchInterval);
     }
 
@@ -165,7 +165,7 @@ const Notifier = function(props) {
             </div>
         </div>
         <div className="row">
-            <div className="label">Vaccine type</div>
+            <div className="label">Vaccine Type:</div>
             <div>
                 <label><input type="radio" name="vaccineCompany" value="COVISHIELD" onChange={onCompanyChange} checked={vaccineCompany === `COVISHIELD` ? true : false} /> COVISHIELD</label>
                 <br />
