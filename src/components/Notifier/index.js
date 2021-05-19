@@ -175,8 +175,10 @@ const Notifier = function(props) {
                         </OptGroup>
                     })}
                 </Select>
-                <img className="refresh" src={RefreshIcon} alt="refresh" onClick={fetchAvailableSlots}></img>
             </div>
+        </div>
+        <div className="refresh">
+            <div onClick={fetchAvailableSlots}>Click here to refresh the results<img src={RefreshIcon} alt="refresh"></img></div>
         </div>
         <div className="confirmation">
             {message}
