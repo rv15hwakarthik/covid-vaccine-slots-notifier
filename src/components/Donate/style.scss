@@ -1,0 +1,19 @@
+
+.donate {
+
+    .heading {
+        margin-top: 20px;
+        border: 2px solid pink;
+        padding: 20px 0;
+        background: pink;
+    }
+
+    .cards-container {
+        padding: 30px 0 50px;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        margin: auto;
+        align-items: center;
+    }
+}

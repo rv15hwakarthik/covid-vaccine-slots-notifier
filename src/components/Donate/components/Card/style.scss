@@ -1,0 +1,38 @@
+
+.card {
+    margin: 15px;
+    padding: 15px;
+    border: 2px solid pink;
+    border-radius: 10px;
+    width: 310px;
+    display: flex;
+
+    .text-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 20px;
+        text-align: left;
+
+        > div {
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+
+        .website {
+            padding-right: 10px;
+        }
+
+        .donate-now {
+            padding: 5px;
+            border: 1px solid #1890ff;
+            background-color: #1890ff;
+            color: white;
+            border-radius: 10px;
+            display: inline-block;
+        }
+    }
+}

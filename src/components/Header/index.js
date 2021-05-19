@@ -11,8 +11,7 @@ const Header = function () {
                 <NavLink to="/" exact activeClassName="selected" >Notifier</NavLink>
             </div>
             <div>
-                {/* <NavLink  exact activeClassName="selected" >Donate</NavLink> */}
-                <span>Donate<span className="tag">Coming Soon</span></span>
+                <NavLink to="/donate" exact activeClassName="selected" >Donate</NavLink>
             </div>
         </div>
     </div>

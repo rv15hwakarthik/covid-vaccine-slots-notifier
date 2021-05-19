@@ -2,6 +2,7 @@ import './App.css';
 import Header from '../src/components/Header';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Notifier from '../src/components/Notifier';
+import Donate from '../src/components/Donate'
 import Footer from '../src/components/Footer';
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
             <Notifier />
           </Route>
           <Route path="/donate">
-            this is the donations page
+            <Donate />
           </Route>
         </div>
         <Footer />

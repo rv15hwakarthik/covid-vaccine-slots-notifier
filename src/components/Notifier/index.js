@@ -136,7 +136,7 @@ const Notifier = function(props) {
     }
 
     return districtsJSON.length > 0 ? <div className="notifier">
-        <div className="instructions">
+        <div className="heading">
                 <div>- Make sure the browser notifications are enabled for this website</div>
                 <div>- Keep the tab open to get a browser notification whenever a slot is available</div>
                 <div>- Your selected district is saved for quicker results</div>
