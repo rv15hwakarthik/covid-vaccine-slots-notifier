@@ -23,6 +23,7 @@ const Notifier = function(props) {
     const [districts, setDistricts] = useState([]);
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
     const [ageGroup, setAgeGroup] = useState(`18`);
+    const [dose, setDose] = useState(`dose1`);
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
     const [availableCenters, setAvailableCenters] = useState([]);
@@ -49,7 +50,7 @@ const Notifier = function(props) {
 
     useEffect(() => {
         fetchAvailableSlots();
-    }, [districtId, ageGroup])
+    }, [districtId, ageGroup, dose])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
@@ -61,7 +62,9 @@ const Notifier = function(props) {
                 let centersArray = []
                 centers && centers.map((center) => {
                     center.sessions && center.sessions.map(session => {
-                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup)) {
+                        let doses  = session.available_capacity_dose1
+                        if(dose === 'dose2') { doses = session.available_capacity_dose2 }
+                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup) && doses > 0) {
                             centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
                             if(fromInterval) {
@@ -100,6 +103,15 @@ const Notifier = function(props) {
     function onAgeChange(e) {
         localStorage.setItem('ageGroup', e.target.value );
         setAgeGroup(e.target.value)
+
+        clearInterval(fetchInterval);
+        setFetchInterval(setInterval(function() {
+            fetchAvailableSlots(true);
+        }, 45000));
+    }
+    function onDoseChange(e) {
+        localStorage.setItem('dose', e.target.value );
+        setDose(e.target.value)
 
         clearInterval(fetchInterval);
         setFetchInterval(setInterval(function() {
@@ -154,6 +166,13 @@ const Notifier = function(props) {
             <div>
                 <input type="radio" name="age" value="18" onChange={onAgeChange} checked={ageGroup === `18` ? true : false} /><label>18 to 44</label>
                 <input type="radio" name="age" value="45" onChange={onAgeChange} checked={ageGroup === `45` ? true : false} /><label>45+</label>
+            </div>
+        </div>
+        <div className="row">
+            <div className="label">Dose:</div>
+            <div>
+                <input type="radio" name="dose1" value="dose1" onChange={onDoseChange} checked={dose === `dose1` ? true : false} /><label>first dose</label>
+                <input type="radio" name="dose2" value="dose2" onChange={onDoseChange} checked={dose === `dose2` ? true : false} /><label>second dose</label>
             </div>
         </div>
         <div className="row">
