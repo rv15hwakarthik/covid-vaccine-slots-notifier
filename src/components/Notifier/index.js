@@ -25,7 +25,8 @@ const { Option, OptGroup } = Select;
 const Notifier = function(props) {
 
     const [districtId, setDistrictId] = useState((localStorage.getItem('districtId') && parseInt(localStorage.getItem('districtId'))) || 571);
-    const [ageGroup, setAgeGroup] = useState((localStorage.getItem('ageGroup')) || `18`);
+    const [ageGroup, setAgeGroup] = useState(localStorage.getItem('ageGroup') || `18`);
+    const [dose, setDose] = useState( localStorage.getItem('dose') || `dose_1`);
     const [message, setMessage] = useState('');
     const [fetchInterval, setFetchInterval] = useState('');
     const [availableCenters, setAvailableCenters] = useState([]);
@@ -45,7 +46,7 @@ const Notifier = function(props) {
         setFetchInterval(setInterval(function() {
             fetchAvailableSlots(true);
         }, 40000));
-    }, [districtId, ageGroup])
+    }, [districtId, ageGroup, dose])
 
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
@@ -58,10 +59,14 @@ const Notifier = function(props) {
                 let centersArray = []
                 centers && centers.map((center) => {
                     center.sessions && center.sessions.map(session => {
-                        if(session.available_capacity && session.min_age_limit === parseInt(ageGroup)) {
+                        let doses  = session.available_capacity_dose1
+                        if (dose === 'dose_2') { 
+                            doses = session.available_capacity_dose2 
+                        }
+
+                        if(doses && session.min_age_limit === parseInt(ageGroup)) {
                             centersArray.push(center.name + "," + center.block_name)
                             isAvailable = true;
-                            return;
                         }
                     })
                 });
@@ -97,13 +102,19 @@ const Notifier = function(props) {
         clearInterval(fetchInterval);
     }
 
+    function onDoseChange(e) {
+        localStorage.setItem('dose', e.target.value );
+        setDose(e.target.value)
+
+        clearInterval(fetchInterval);
+    }
+
     function triggerBrowserNotification() {
         if (!("Notification" in window)) {
             console.log("This browser does not support desktop notification");
         }
 
         else if (Notification.permission === "granted") {
-            // If it's okay let's create a notification
             var notification = new Notification("Hi there! Vaccine slots are available:");
             notification.onclick = function(event) {
                 event.preventDefault(); 
@@ -111,10 +122,8 @@ const Notifier = function(props) {
             }
         }
 
-        // Otherwise, we need to ask the user for permission
         else if (Notification.permission !== "denied") {
             Notification.requestPermission().then(function (permission) {
-                // If the user accepts, let's create a notification
                 if (permission === "granted") {
                     var notification = new Notification("Hi there! Vaccine slots are available:");
                     notification.onclick = function(event) {
@@ -137,6 +146,13 @@ const Notifier = function(props) {
             <div>
                 <label><input type="radio" name="age" value="18" onChange={onAgeChange} checked={ageGroup === `18` ? true : false} /> 18 to 44</label>
                 <label><input type="radio" name="age" value="45" onChange={onAgeChange} checked={ageGroup === `45` ? true : false} /> 45+</label>
+            </div>
+        </div>
+        <div className="row">
+            <div className="label">Dose Number:</div>
+            <div>
+                <label><input type="radio" name="dose" value="dose_1" onChange={onDoseChange} checked={dose === `dose_1` ? true : false} /> Dose 1</label>
+                <label><input type="radio" name="dose" value="dose_2" onChange={onDoseChange} checked={dose === `dose_2` ? true : false} /> Dose 2</label>
             </div>
         </div>
         <div className="row">
