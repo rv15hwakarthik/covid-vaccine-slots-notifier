@@ -110,7 +110,7 @@ const Notifier = function(props) {
         clearInterval(fetchInterval);
     }
 
-    function onCompanyChange(e) {
+    function onVaccineTypeChange(e) {
         localStorage.setItem('vaccineType', e.target.value );
         setVaccineType(e.target.value)
         clearInterval(fetchInterval);
@@ -167,11 +167,11 @@ const Notifier = function(props) {
         <div className="row">
             <div className="label">Vaccine Type:</div>
             <div>
-                <label><input type="radio" name="vaccineType" value="ANY" onChange={onCompanyChange} checked={vaccineType === `ANY` ? true : false} /> ANY</label>
+                <label><input type="radio" name="vaccineType" value="ANY" onChange={onVaccineTypeChange} checked={vaccineType === `ANY` ? true : false} /> ANY</label>
                 <br />
-                <label><input type="radio" name="vaccineType" value="COVISHIELD" onChange={onCompanyChange} checked={vaccineType === `COVISHIELD` ? true : false} /> COVISHIELD</label>
+                <label><input type="radio" name="vaccineType" value="COVISHIELD" onChange={onVaccineTypeChange} checked={vaccineType === `COVISHIELD` ? true : false} /> COVISHIELD</label>
                 <br />
-                <label><input type="radio" name="vaccineType" value="COVAXIN" onChange={onCompanyChange} checked={vaccineType === `COVAXIN` ? true : false} /> COVAXIN</label>
+                <label><input type="radio" name="vaccineType" value="COVAXIN" onChange={onVaccineTypeChange} checked={vaccineType === `COVAXIN` ? true : false} /> COVAXIN</label>
             </div>
         </div>
         <div className="row">
