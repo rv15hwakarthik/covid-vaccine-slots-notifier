@@ -2,7 +2,6 @@
 .donate {
 
     .heading {
-        margin-top: 20px;
         border: 2px solid pink;
         padding: 20px 0;
         background: pink;
@@ -15,12 +14,5 @@
         width: 50%;
         margin: auto;
         align-items: center;
-    }
-
-    @media only screen and (max-width: 600px) {
-
-        .heading {
-            margin-top: 0;
-        }
     }
 }

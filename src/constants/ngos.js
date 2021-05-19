@@ -18,7 +18,7 @@ const NGOs = [
         "image": Goonj
     },
     {
-        "title": "Donate Cart",
+        "title": "DonateKart",
         "websiteUrl": "https://www.donatekart.com/",
         "paymentPageUrl": "https://pages.razorpay.com/donatekart",
         "image": DonateKart
