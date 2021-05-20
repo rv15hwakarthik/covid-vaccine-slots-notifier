@@ -65,9 +65,8 @@ const Notifier = function(props) {
                         if (dose === 'dose_2') { 
                             doses = session.available_capacity_dose2 
                         }
-
                         if(doses && session.min_age_limit === parseInt(ageGroup) && (session.vaccine === vaccineType || vaccineType === 'ANY')){
-                            centersArray.push(center.name + "," + center.block_name)
+                            centersArray.push(center.name + "," + center.block_name + ' - ' + center.pincode)
                             isAvailable = true;
                         }
                     })
