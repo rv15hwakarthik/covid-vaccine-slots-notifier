@@ -33,7 +33,7 @@ export function triggerBrowserNotification() {
 }
 
 export function storeData(requestBody) {
-    Axios.post('https://vaccine-browser-notifier-default-rtdb.asia-southeast1.firebasedatabase.app/', {
+    Axios.post('https://vaccine-browser-notifier-default-rtdb.asia-southeast1.firebasedatabase.app/.json', {
         timestamp: new Date(),
         ...requestBody,
     });
