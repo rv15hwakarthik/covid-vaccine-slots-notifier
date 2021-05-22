@@ -10,13 +10,10 @@ import Header from './components/Header';
 import './style.scss'
 import 'antd/dist/antd.css';
 
+import { getDateString, triggerBrowserNotification, storeData } from './utils';
 const districtsJSON = require('../../constants/districts.json');
+const dateParam = getDateString();
 
-var MyDateString;
-var MyDate = new Date();
-MyDateString = ('0' + MyDate.getDate()).slice(-2) + '-'
-    + ('0' + (MyDate.getMonth() + 1)).slice(-2) + '-'
-    + MyDate.getFullYear();
 
 const AVAILABLE_MESSAGE = <span>Vaccines are <span style={{ color: 'green'}}>AVAILABLE </span>- <a href="https://selfregistration.cowin.gov.in/" target="_blank" rel="noreferrer" >Cowin<img src={LinkIcon} alt="redirect icon" width="20px" style={{ verticalAlign: 'middle'}} ></img></a><div>Available at :</div></span>
 const NOT_AVAILABLE_MESSAGE = <span>Vaccines are <span style={ { color: 'red'}}>NOT AVAILABLE</span></span>
@@ -55,7 +52,7 @@ const Notifier = function(props) {
     function fetchAvailableSlots(fromInterval) {
         setMessage('');
         setAvailableCenters([]);
-        Axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${MyDateString}`).
+        Axios.get(`https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id=${districtId}&date=${dateParam}`).
         then(response => {
             if(response.data && response.status === 200) {
                 const centers = response.data.centers;
@@ -69,7 +66,7 @@ const Notifier = function(props) {
                         }
 
                         if(doses && session.min_age_limit === parseInt(ageGroup) && (session.vaccine === vaccineType || vaccineType === 'ANY')){
-                            centersArray.push(center.name + "," + center.block_name)
+                            centersArray.push(center.name + "," + center.block_name);
                             isAvailable = true;
                         }
                     })
@@ -83,6 +80,8 @@ const Notifier = function(props) {
                 } else {
                     setMessage(NOT_AVAILABLE_MESSAGE);
                 }
+                storeData({ isAvailable, ageGroup, vaccineType, dose, districtId });
+
             } else {
                 setMessage(SOMETHING_WENT_WRONG);
             }
@@ -95,6 +94,7 @@ const Notifier = function(props) {
     function onDistrictChange(value) {
         localStorage.setItem('districtId', value );
         setDistrictId(value)
+
         clearInterval(fetchInterval);
     }
 
@@ -115,37 +115,8 @@ const Notifier = function(props) {
     function onVaccineTypeChange(e) {
         localStorage.setItem('vaccineType', e.target.value );
         setVaccineType(e.target.value)
-        clearInterval(fetchInterval);
-    }
 
-    function triggerBrowserNotification() {
-        try {
-            if (!("Notification" in window)) {
-                console.log("This browser does not support desktop notification");
-            }
-    
-            else if (Notification.permission === "granted") { 
-                var notification = new Notification("Hi there! Vaccine slots are available:");
-                notification.onclick = function(event) {
-                    event.preventDefault(); 
-                    window.open('https://selfregistration.cowin.gov.in/', '_blank');
-                }
-            }
-    
-            else if (Notification.permission !== "denied") {
-                Notification.requestPermission().then(function (permission) {
-                    if (permission === "granted") {
-                        var notification = new Notification("Hi there! Vaccine slots are available:");
-                        notification.onclick = function(event) {
-                            event.preventDefault(); 
-                            window.open('https://selfregistration.cowin.gov.in/', '_blank');
-                        }
-                    }
-                });
-            }
-        } catch(err) {
-            console.log("Failed to send a notification due to error:", err);
-        }
+        clearInterval(fetchInterval);
     }
 
     return districtsJSON.length > 0 ? <div className="notifier">
